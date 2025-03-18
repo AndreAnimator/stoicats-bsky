@@ -8,9 +8,33 @@ const POST_TIMEOUT = 60e3; // 60s
 
 const readFile = util.promisify(fs.readFile);
 
-async function loadImageData(path: fs.PathLike) {
+const url = 'https://api.thecatapi.com/v1/images/';
+const apikey = process.env.API_KEY;
+
+async function getCats(url: string): Promise<any> {
+  const response = await fetch(`${url}search?api_key=${apikey}&has_breeds=1`);
+  if (!response.ok) {
+    throw new Error('Forsooth, a scourge upon our fetch quest: ' + response.statusText);
+  }
+  const catData: any = await response.json();
+  return catData;
+}
+
+async function loadImageData(cats) {
+  const imageUrl = cats[0].url;
+
   // Read the file from the provided path
-  let buffer = await readFile(path);
+  let buffer = imageUrl;
+
+  await fetch(imageUrl)
+    .then((response) => response.blob())
+    .then((blob) => {
+      const objectURL = URL.createObjectURL(blob);
+      const img = new Image();
+      img.src = objectURL;
+      buffer = img;
+      console.log(buffer);
+    });
 
   // Check file size, 1MB = 1024*1024 bytes
   if (buffer.byteLength > 1024 * 1024) {
@@ -104,7 +128,7 @@ type PostImageOptions = {
   text: string;
   altText: string;
 };
-async function postImage({ path, text, altText }: PostImageOptions) {
+async function postImage({ text, altText }: PostImageOptions) {
   const agent = new BskyAgent({ service: 'https://bsky.social' });
   BskyAgent.configure({
     fetch: fetchHandler,
@@ -113,7 +137,8 @@ async function postImage({ path, text, altText }: PostImageOptions) {
     identifier: process.env.BSKY_IDENTIFIER || 'BSKY_IDENTIFIER missing',
     password: process.env.BSKY_PASSWORD || 'BSKY_PASSWORD missing',
   });
-  const { data } = await loadImageData(path);
+  const cats = await getCats(url);
+  const { data } = await loadImageData(cats);
 
   const testUpload = await agent.uploadBlob(data, { encoding: 'image/jpg' });
   await agent.post({

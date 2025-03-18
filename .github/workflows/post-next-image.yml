@@ -28,6 +28,7 @@ jobs:
         env:
           BSKY_IDENTIFIER: ${{ secrets.BSKY_IDENTIFIER }}
           BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}
+          API_KEY: ${{ secrets.API_KEY }}
           LAST_IMAGE_NAME: ${{ vars.LAST_IMAGE_NAME }}
         run: |
           echo "Previous image name: $LAST_IMAGE_NAME"
