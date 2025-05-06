@@ -31,7 +31,3 @@ jobs:
           API_KEY: ${{ secrets.API_KEY }}
         run: |
           echo "Authenticating with user identifier: $BSKY_IDENTIFIER"
-
-      - uses: action-pack/set-variable@v1
-        with:
-          token: ${{ secrets.REPO_ACCESS_TOKEN }}
