@@ -1,4 +1,4 @@
-import { BskyAgent, stringifyLex, jsonToLex } from '@atproto/api';
+import { AtpAgent, stringifyLex, jsonToLex } from '@atproto/api';
 import * as fs from 'fs';
 import * as util from 'util';
 import * as sharp from 'sharp';
@@ -68,11 +68,19 @@ async function resizeImage(buffer: Buffer): Promise<Buffer> {
   return outputBuffer;
 }
 
+/*
+
 interface FetchHandlerResponse {
   status: number;
   headers: Record<string, string>;
   body: ArrayBuffer | undefined;
 }
+  
+*/
+
+/*
+
+Fetch Handler antigo
 
 async function fetchHandler(
   reqUri: string,
@@ -122,6 +130,16 @@ async function fetchHandler(
     body: resBody,
   };
 }
+*/
+
+// Fetch novo seguindo o https://github.com/bluesky-social/atproto/tree/main/packages/api#oauth-based-session-management
+
+const newFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+  console.log('requesting', input);
+  const response = await globalThis.fetch(input, init);
+  console.log('got response', response);
+  return response;
+};
 
 type PostImageOptions = {
   path: fs.PathLike;
@@ -129,10 +147,8 @@ type PostImageOptions = {
   altText: string;
 };
 async function postImage({ text, altText }: PostImageOptions) {
-  const agent = new BskyAgent({ service: 'https://bsky.social' });
-  BskyAgent.configure({
-    fetch: fetchHandler,
-  });
+  // Removi o fetchHandler de antes pq n tava batendo os tipos
+  const agent = new AtpAgent({ service: 'https://bsky.social', fetch: newFetch });
   await agent.login({
     identifier: process.env.BSKY_IDENTIFIER || 'BSKY_IDENTIFIER missing',
     password: process.env.BSKY_PASSWORD || 'BSKY_PASSWORD missing',

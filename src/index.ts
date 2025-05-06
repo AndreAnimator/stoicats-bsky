@@ -4,30 +4,18 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 interface StoicData {
-  quote: string;
   author: string;
+  quote: string;
 }
 
 // EDIT THIS!
-function postTextFromImageName(imageName: string): string {
-  // Remove the file extension and parse the date
-  const dateParts = imageName.replace('.jpg', '').split('-');
-  const date = new Date(Number(dateParts[0]), Number(dateParts[1]) - 1, Number(dateParts[2] || 1));
-
-  // Create a formatter
-  const formatter = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
-  // Format the date
-  return formatter.format(date);
+function postText(stoicText: string): string {
+  return stoicText;
 }
 
 // EDIT THIS!
-function altTextFromImageName(imageName: string): string {
-  return 'Image from ' + postTextFromImageName(imageName);
+function altText(stoicQuote: string): string {
+  return 'Stoic quote: ' + stoicQuote + '. With a cute looking cat.';
 }
 
 async function getQuotes(url: string): Promise<StoicData> {
@@ -41,7 +29,7 @@ async function getQuotes(url: string): Promise<StoicData> {
 
 // Shouldn't have to edit this.
 async function main() {
-  const stoicInfo = await getQuotes('https://api.themotivate365.com/stoic-quote');
+  const stoicInfo = await getQuotes('https://stoic.tekloon.net/stoic-quote');
   const { LAST_IMAGE_NAME: lastImageName } = process.env;
   const nextImage = await getNextImage({ lastImageName });
 
@@ -49,8 +37,8 @@ async function main() {
 
   await postImage({
     path: nextImage.absolutePath,
-    text: postTextFromImageName(stoicInfo.author + ' - ' + '"' + stoicInfo.quote + '"'),
-    altText: altTextFromImageName(nextImage.imageName),
+    text: postText(stoicInfo.author + ' - ' + '"' + stoicInfo.quote + '"'),
+    altText: altText(stoicInfo.author + ' - ' + '"' + stoicInfo.quote + '"'),
   });
 }
 
