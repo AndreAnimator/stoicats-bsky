@@ -30,13 +30,8 @@ async function getQuotes(url: string): Promise<StoicData> {
 // Shouldn't have to edit this.
 async function main() {
   const stoicInfo = await getQuotes('https://stoic.tekloon.net/stoic-quote');
-  const { LAST_IMAGE_NAME: lastImageName } = process.env;
-  const nextImage = await getNextImage({ lastImageName });
-
-  console.log(nextImage.imageName);
 
   await postImage({
-    path: nextImage.absolutePath,
     text: postText(stoicInfo.author + ' - ' + '"' + stoicInfo.quote + '"'),
     altText: altText(stoicInfo.author + ' - ' + '"' + stoicInfo.quote + '"'),
   });

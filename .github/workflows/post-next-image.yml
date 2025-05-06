@@ -30,11 +30,8 @@ jobs:
           BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}
           API_KEY: ${{ secrets.API_KEY }}
         run: |
-          echo "Previous image name: $LAST_IMAGE_NAME"
           echo "Authenticating with user identifier: $BSKY_IDENTIFIER"
 
       - uses: action-pack/set-variable@v1
         with:
-          name: 'LAST_IMAGE_NAME'
-          value: ${{ env.NEW_LAST_IMAGE_NAME }}
           token: ${{ secrets.REPO_ACCESS_TOKEN }}

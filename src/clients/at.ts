@@ -142,7 +142,6 @@ const newFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
 };
 
 type PostImageOptions = {
-  path: fs.PathLike;
   text: string;
   altText: string;
 };
