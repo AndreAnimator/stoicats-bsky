@@ -1,11 +1,9 @@
 import { postImage } from './clients/at';
-import { getNextImage } from './images';
-import * as dotenv from 'dotenv';
-dotenv.config();
+require('dotenv').config({ debug: true });
+console.log(process.env);
 
 interface StoicData {
-  author: string;
-  quote: string;
+  data: { author: string; quote: string };
 }
 
 // EDIT THIS!
@@ -23,7 +21,7 @@ async function getQuotes(url: string): Promise<StoicData> {
   if (!response.ok) {
     throw new Error('Forsooth, a scourge upon our fetch quest: ' + response.statusText);
   }
-  const stoicData: StoicData = await response.json();
+  const stoicData = await response.json();
   return stoicData;
 }
 
@@ -32,8 +30,8 @@ async function main() {
   const stoicInfo = await getQuotes('https://stoic.tekloon.net/stoic-quote');
 
   await postImage({
-    text: postText(stoicInfo.author + ' - ' + '"' + stoicInfo.quote + '"'),
-    altText: altText(stoicInfo.author + ' - ' + '"' + stoicInfo.quote + '"'),
+    text: postText(stoicInfo.data.author + ' - ' + '"' + stoicInfo.data.quote + '"'),
+    altText: altText(stoicInfo.data.author + ' - ' + '"' + stoicInfo.data.quote + '"'),
   });
 }
 

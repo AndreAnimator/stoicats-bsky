@@ -8,6 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "@atproto/api": "^0.15.6",
+    "axios": "^1.9.0",
     "bsky-image-bot": "file:",
     "dotenv": "^16.5.0",
     "sharp": "^0.32.1"

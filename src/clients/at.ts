@@ -1,12 +1,9 @@
 import { AtpAgent, stringifyLex, jsonToLex } from '@atproto/api';
-import * as fs from 'fs';
-import * as util from 'util';
+import axios from 'axios';
 import * as sharp from 'sharp';
 
 const GET_TIMEOUT = 15e3; // 15s
 const POST_TIMEOUT = 60e3; // 60s
-
-const readFile = util.promisify(fs.readFile);
 
 const url = 'https://api.thecatapi.com/v1/images/';
 const apikey = process.env.API_KEY;
@@ -22,20 +19,12 @@ async function getCats(url: string): Promise<any> {
 
 async function loadImageData(cats) {
   const imageUrl = cats[0].url;
+  console.log('Url da imagem: ');
+  console.log(imageUrl);
 
   // Read the file from the provided path
-  let buffer = imageUrl;
-
-  await fetch(imageUrl)
-    .then((response) => response.blob())
-    .then((blob) => {
-      const objectURL = URL.createObjectURL(blob);
-      const img = new Image();
-      img.src = objectURL;
-      buffer = img;
-      console.log(buffer);
-    });
-
+  const response = await axios.get(imageUrl, { responseType: 'arraybuffer' });
+  let buffer = Buffer.from(response.data, 'utf-8');
   // Check file size, 1MB = 1024*1024 bytes
   if (buffer.byteLength > 1024 * 1024) {
     buffer = await resizeImage(buffer);
@@ -134,12 +123,16 @@ async function fetchHandler(
 
 // Fetch novo seguindo o https://github.com/bluesky-social/atproto/tree/main/packages/api#oauth-based-session-management
 
-const newFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
+async function newFetch(input: RequestInfo | URL, init?: RequestInit) {
   console.log('requesting', input);
   const response = await globalThis.fetch(input, init);
   console.log('got response', response);
   return response;
-};
+}
+
+function checkFileExtension(url: string): string {
+  return url.substring(url.lastIndexOf('.') + 1).toLowerCase();
+}
 
 type PostImageOptions = {
   text: string;
@@ -153,9 +146,20 @@ async function postImage({ text, altText }: PostImageOptions) {
     password: process.env.BSKY_PASSWORD || 'BSKY_PASSWORD missing',
   });
   const cats = await getCats(url);
+  console.log('Info dos gatos: ');
+  console.log(cats);
+  console.log('como q parsa esse json');
+  console.log(cats.url + ' Assim? ');
+  console.log('Ou assim ? ' + cats[0].url);
   const { data } = await loadImageData(cats);
+  console.log('Dados da imagem: ');
+  console.log(data);
 
-  const testUpload = await agent.uploadBlob(data, { encoding: 'image/jpg' });
+  console.log('Extensão da imagem:');
+  console.log(checkFileExtension(cats[0].url));
+  const testUpload = await agent.uploadBlob(data, { encoding: 'image/' + checkFileExtension(cats[0].url) });
+  console.log('Testando a imamgem: ');
+  console.log(testUpload.data.blob);
   await agent.post({
     text: text,
     embed: {
