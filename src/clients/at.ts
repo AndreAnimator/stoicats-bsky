@@ -27,7 +27,7 @@ async function loadImageData(cats) {
   let buffer = Buffer.from(response.data, 'utf-8');
   // Check file size, 1MB = 1024*1024 bytes
   if (buffer.byteLength > 1024 * 1024) {
-    buffer = await resizeImage(buffer);
+    buffer = (await resizeImage(buffer)) as unknown as Buffer<ArrayBuffer>;
   }
 
   // Convert the buffer to a Uint8Array and return it
