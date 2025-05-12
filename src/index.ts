@@ -1,6 +1,7 @@
 import { postImage } from './clients/at';
 require('dotenv').config({ debug: true });
 console.log(process.env);
+import { CronJob } from 'cron';
 
 interface StoicData {
   data: { author: string; quote: string };
@@ -36,3 +37,10 @@ async function main() {
 }
 
 main();
+
+const scheduleExpressionMinute = '* * * * *';
+const scheduleExpression = '0 */3 * * *';
+
+const job = new CronJob(scheduleExpressionMinute, main);
+
+job.start;
