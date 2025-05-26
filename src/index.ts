@@ -37,10 +37,3 @@ async function main() {
 }
 
 main();
-
-const scheduleExpressionMinute = '* * * * *';
-const scheduleExpression = '0 */3 * * *';
-
-const job = new CronJob(scheduleExpressionMinute, main);
-
-job.start;
