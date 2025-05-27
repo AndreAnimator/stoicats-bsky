@@ -29,6 +29,4 @@ jobs:
           BSKY_IDENTIFIER: ${{ secrets.BSKY_IDENTIFIER }}
           BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD }}
           API_KEY: ${{ secrets.API_KEY }}
-        run: |
-          echo "Authenticating with user identifier: $BSKY_IDENTIFIER"
-          node ./src/index.ts
+        run: yarn run start
