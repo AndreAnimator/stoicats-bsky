@@ -1,6 +1,7 @@
 import { postImage } from './clients/at';
 require('dotenv').config({ debug: true });
 console.log(process.env);
+import { CronJob } from 'cron';
 
 interface StoicData {
   data: { author: string; quote: string };

@@ -1,17 +1,21 @@
 {
-  "name": "bsky-image-bot",
+  "name": "stoicats-bsky-bot",
   "version": "0.0.1",
-  "description": "Bot to automatically publish a directory of images on Bluesky",
+  "description": "Bot to automatically publish a stoic quote and images of cat on Bluesky",
   "main": "index.js",
-  "repository": "https://github.com/jasonprado/bsky-image-bot",
-  "author": "Jason Prado <jason.prado@gmail.com>",
+  "repository": "https://github.com/AndreAnimator/stoicats-bsky",
+  "author": "Dre <andrevccreator@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@atproto/api": "^0.15.6",
     "axios": "^1.9.0",
     "bsky-image-bot": "file:",
+    "cron": "^4.3.0",
     "dotenv": "^16.5.0",
-    "sharp": "^0.32.1"
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "sharp": "^0.32.1",
+    "yarn": "^1.22.22"
   },
   "scripts": {
     "lint": "eslint .",
@@ -19,7 +23,7 @@
     "start": "ts-node src/index.ts"
   },
   "devDependencies": {
-    "@types/node": "^20.3.1",
+    "@types/node": "^20.17.46",
     "@typescript-eslint/eslint-plugin": "^5.60.0",
     "@typescript-eslint/parser": "^5.60.0",
     "eslint": "^8.43.0",
