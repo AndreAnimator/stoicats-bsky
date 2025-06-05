@@ -1,4 +1,4 @@
-# bsky-image-bot [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Build](https://github.com/AndreAnimator/stoicats-bsky/actions/workflows/post-next-image.yml/badge.svg)](https://github.com/AndreAnimator/stoicats-bsky/blob/68924a7e82b25682afcfec93b853a0276406d97f/.github/workflows/post-next-image.yml)
+# bsky-image-bot [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE) [![Build](https://github.com/AndreAnimator/stoicats-bsky/actions/workflows/post-next-image.yml/badge.svg)](https://github.com/AndreAnimator/stoicats-bsky/actions/workflows/post-next-image.yml)
 
 This is a simple bot that posts an image of a cat from the CatsAPI with a stoic quote from stoic quote lambad public API to Bluesky on a cron job using GitHub Actions. Forked and changed from: https://github.com/jasonprado/bsky-image-bot.
 
