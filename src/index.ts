@@ -1,18 +1,14 @@
 import { postImage } from './clients/at';
 require('dotenv').config({ debug: true });
-console.log(process.env);
-import { CronJob } from 'cron';
 
 interface StoicData {
   data: { author: string; quote: string };
 }
 
-// EDIT THIS!
 function postText(stoicText: string): string {
   return stoicText;
 }
 
-// EDIT THIS!
 function altText(stoicQuote: string): string {
   return 'Stoic quote: ' + stoicQuote + '. With a cute looking cat.';
 }
@@ -26,12 +22,16 @@ async function getQuotes(url: string): Promise<StoicData> {
   return stoicData;
 }
 
-// Shouldn't have to edit this.
 async function main() {
-  const stoicInfo = await getQuotes('https://stoic.tekloon.net/stoic-quote');
+  var stoicInfo = await getQuotes('https://stoic.tekloon.net/stoic-quote');
+  var text: string = stoicInfo.data.author + ' - ' + '"' + stoicInfo.data.quote + '"';
+  while (text.length > 300) {
+    stoicInfo = await getQuotes('https://stoic.tekloon.net/stoic-quote');
+    text = stoicInfo.data.author + ' - ' + '"' + stoicInfo.data.quote + '"';
+  }
 
   await postImage({
-    text: postText(stoicInfo.data.author + ' - ' + '"' + stoicInfo.data.quote + '"'),
+    text: postText(text),
     altText: altText(stoicInfo.data.author + ' - ' + '"' + stoicInfo.data.quote + '"'),
   });
 }
